@@ -18,7 +18,7 @@ export const  protectRoute=[
             
             next();
     }catch(error){
-        console.error("error in protect route middlewaree",error);
+        console.error("error in protect route middleware",error);
         res.status(500).json({message:"server error in protect route middleware"});
     }
     }

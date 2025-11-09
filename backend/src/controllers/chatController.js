@@ -5,8 +5,8 @@ import { err } from "inngest/types";
 export async  function getStreamToken(req,res){
     try{
         // use clerk id for stream not mongoDb-id it should match the id we have in the stream dashboard
-        const token=chatClient.createToken(req,user,clerkId);
-        res.stauts(200).json({
+        const token=chatClient.createToken(req.user,clerkId);
+        res.status(200).json({
             token,
             userId:req.user.clerkId,
             userName:req.user.name,
