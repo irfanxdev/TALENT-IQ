@@ -3,7 +3,7 @@ import mongoose  from 'mongoose';
 const sessionSchema= new mongoose.Schema({
     problem:{
         type:String,
-        reuired:true,
+        reqired:true,
     },
     difficulty:{
         type:String,
@@ -29,9 +29,9 @@ const sessionSchema= new mongoose.Schema({
     // stream vedio call id
     callId:{
         type:String,
-        dafault:"",
+        default:"",
     }
-},({timestamps:true}));
+},({timestamps:true});
 
 const Session =mongoose.model("Session",sessionSchema);
 

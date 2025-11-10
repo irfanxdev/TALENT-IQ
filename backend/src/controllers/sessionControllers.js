@@ -1,10 +1,11 @@
 import Session from '../models/Session.js';
 import {streamClient} from "../lib/stream.js";
+import { chatClient } from '../lib/stream.js';
 
 export async function createSession(req,res){
     try{
         const {problem,difficulty}=req.body;
-        const userId=req.user_id; // mongoDb ID
+        const userId=req.user._id; // mongoDb ID
         const clerkId=req.user.clerkId; // clerk ID
 
         if(!problem || !difficulty){
@@ -21,7 +22,7 @@ export async function createSession(req,res){
         await streamClient.video.call("default",callId).getOrCreate({
             data:{
                 created_by_id:clerkId,
-                custom:{problem,difficulty,sessionId:session._dirname.toString()},
+                custom:{problem,difficulty,sessionId:session._id.toString()},
             },
         });
 
@@ -101,18 +102,18 @@ export async function joinSession(req,res){
         const userId=req.user._id
         const clerkId=req.user.clerkId
 
-        const session =await Session.findById(Id);
-        if(!session) return res.status(404).json({messgae:"Session not found"});
+        const session =await Session.findById(id);
+        if(!session) return res.status(404).json({message:"Session not found"});
 
         // check if session is already full- hads a participant
 
-        if(session.participants) return res.status(404).json({message:"Session is full"});
+        if(session.participants) return res.status(400).json({"messaging":"Session is full"});
 
         session.participants=userId
         await session.save();
 
-        const channel=chatClient.channel("message",session.callId);
-        await channel.addMembers({clerkId});
+        const channel=chatClient.channel("messaging",session.callId);
+        await channel.addMembers([clerkId]);
 
         res.status(200).json({session});
         }catch(error){
@@ -140,14 +141,14 @@ export async function endSession(req,res){
     }
 
     if(session.status==="completed"){
-        res.status(400).json({message:"session is already completed"});
+        return res.status(400).json({message:"session is already completed"});
     }
    
     session.status="completed"
     await session.save();
 
     // delete the stream call
-    const call =streamClient.video.call("dafault",session.callId);
+    const call=streamClient.video.call("dafault",session.callId);
     await call.delete({hard:true});
 
     // delete the chat channel
