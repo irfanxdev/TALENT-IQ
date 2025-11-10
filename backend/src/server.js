@@ -8,18 +8,21 @@ import {inngest, functions} from './lib/inngest.js';
 import { clerkMiddleware } from '@clerk/express'
 import { protectRoute } from './middleware/protectRoute.js';
 import chatRoutes from "./routes/chatRoutes.js";
+import sessionRoutes from "./routes/sessionRoutes.js";
 
 const app=express();
 
 const __dirname=path.resolve();
 
 app.use(express.json());
+
 // CREADENTIAL TRUE MEANING ?? => SERVER ALLOW A BROWSER TO INCLUDE A COOKIE ON REQUEST
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));
 app.use(clerkMiddleware()) //add aut feild to request object re.auth
 
 app.use('/api/inngest',serve({client:inngest,functions:functions}));
 app.use("/api/chat",chatRoutes);
+app.use("/api/sessions",sessionRoutes);
 
 app.get('/health',(req,res)=>{
     res.status(200).json({message:'user is running'});
