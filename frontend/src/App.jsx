@@ -1,27 +1,30 @@
 import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
 import {SignedIn, SignedOut, SignIn, SignInButton, SignOutButton, UserButton} from '@clerk/clerk-react';
+import { HomePage } from './pages/HomePage';
+import {Routes,Route, Navigate}  from "react-router-dom";
+import { useUser } from '@clerk/clerk-react';
+import { ProblemsPage } from './pages/ProblemsPage';
+import { Toaster } from 'react-hot-toast';
+
 
 function App() {
   const [count, setCount] = useState(0)
-
+  
+  //  this is used to check the user is login or not if not then navigate to the home page 
+  const {isSignedIn}=useUser();
   return (
-    <>
-      <h1>Welcome to the app</h1>
-    <SignedOut>
-      <SignInButton mode="modal">
-        <button>Login</button>
-      </SignInButton>
-    </SignedOut>
-    
-    <SignedIn>
-      <SignOutButton/>
-    </SignedIn>
-  <UserButton/>
-    </>
+   <>
+    <Routes>
+      <Route path="/" element={<HomePage/>}></Route>
+      <Route path='/problems' element={isSignedIn?<ProblemsPage/>:<Navigate to={"/"}/>}/>
+    </Routes>
+    <Toaster position='top-center' toastOptions={{duration:3000}}/>
+  </>
   )
 }
 
 export default App
+
+//todo: react-query transtack query,axios
