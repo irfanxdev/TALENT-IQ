@@ -7,7 +7,7 @@ import {Routes,Route, Navigate}  from "react-router-dom";
 import { useUser } from '@clerk/clerk-react';
 import { ProblemsPage } from './pages/ProblemsPage';
 import { Toaster } from 'react-hot-toast';
-import { DashboardPage } from './pages/DashboardPage.jsx';
+import DashboardPage from "./pages/DashboardPage";
 import ProblemPage from './pages/ProblemPage.jsx';
 
 function App() {
