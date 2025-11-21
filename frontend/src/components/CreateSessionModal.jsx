@@ -1,5 +1,5 @@
 import React from 'react'
-import {PROBLEMS} from "../data/PROBLEMS";
+import {PROBLEMS} from "../data/problems";
 import { Code2Icon, LoaderIcon, PlusIcon } from 'lucide-react';
 
 function CreateSessionModal({
