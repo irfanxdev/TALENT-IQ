@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { PROBLEMS } from "../data/problems";
 import confetti from "canvas-confetti";
+import { useActiveSessions } from "../hooks/useSessions";
 
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Navbar } from "../components/Navbar";
@@ -10,10 +11,12 @@ import CodeEditor from "../components/CodeEditor";
 import { CodeOutput } from "../components/CodeOutput";
 import { executeCode } from "../lib/piston";   // <-- Make sure name matches your file
 import toast from "react-hot-toast";
-
 function ProblemPage(){
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const {data:activeSessions,isLoading,error}=useActiveSessions();
+  console.log(activeSessions)
 
   const [currentProblemId, setCurrentProblemId] = useState("two-sum");
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
