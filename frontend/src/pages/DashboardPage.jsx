@@ -44,11 +44,15 @@ const DashboardPage = () => {
 
   console.log("API URL =", import.meta.env.VITE_API_URL);
 
-  const isUserInSession=(session)=>{
-    if(!user.id) return false;
+  const isUserInSession = (session) => {
+  if (!user?.id) return false;
 
-    return (session.host?.clerkId===user.id || session.participant?.some(p=>p.clerkId===user.id));; 
-   }
+  return (
+    session.host?.clerkId === user.id ||
+    session.participant?.clerkId === user.id  // participant is a single object
+  );
+};
+
   return (
     <>
     <div className='min-h-screen bg-base-300'>

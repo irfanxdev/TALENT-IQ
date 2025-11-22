@@ -46,6 +46,8 @@ app.use(express.json());
 app.use('/api/inngest', serve({ client: inngest, functions }));
 app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
+// app.use("/api/sessions", authMiddleware, attachUser);
+
 
 app.get('/health', (req, res) => {
   res.status(200).json({ message: 'server is running' });

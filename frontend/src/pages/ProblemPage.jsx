@@ -7,10 +7,10 @@ import { useActiveSessions } from "../hooks/useSessions";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Navbar } from "../components/Navbar";
 import ProblemDescription from "../components/ProblemDescription";
-import CodeEditor from "../components/CodeEditor";
-import { CodeOutput } from "../components/CodeOutput";
+import CodeEditorPanel from "../components/CodeEditorPanel";
 import { executeCode } from "../lib/piston";   // <-- Make sure name matches your file
 import toast from "react-hot-toast";
+import { OutputPanel } from "../components/OutputPanel";
 function ProblemPage(){
   const { id } = useParams();
   const navigate = useNavigate();
@@ -149,7 +149,7 @@ function ProblemPage(){
 
               {/* Code Editor Panel */}
               <Panel defaultSize={60} minSize={30}>
-                <CodeEditor
+                <CodeEditorPanel
                   selectedLanguage={selectedLanguage}
                   code={code}
                   isRunning={isRunning}
@@ -163,7 +163,7 @@ function ProblemPage(){
 
               {/* Output Panel */}
               <Panel defaultSize={20} minSize={30}>
-                <CodeOutput output={output} />
+                <OutputPanel output={output} />
               </Panel>
 
             </PanelGroup>

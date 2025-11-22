@@ -1,9 +1,8 @@
-import React from "react";
 import Editor from "@monaco-editor/react";
 import { Loader2Icon, PlayIcon } from "lucide-react";
 import { LANGUAGE_CONFIG } from "../data/problems";
 
-export default function CodeEditor({
+function CodeEditorPanel({
   selectedLanguage,
   code,
   isRunning,
@@ -13,7 +12,6 @@ export default function CodeEditor({
 }) {
   return (
     <div className="h-full bg-base-300 flex flex-col">
-      {/* Top Bar */}
       <div className="flex items-center justify-between px-4 py-3 bg-base-100 border-t border-base-300">
         <div className="flex items-center gap-3">
           <img
@@ -21,12 +19,7 @@ export default function CodeEditor({
             alt={LANGUAGE_CONFIG[selectedLanguage].name}
             className="size-6"
           />
-
-          <select
-            className="select select-sm"
-            value={selectedLanguage}
-            onChange={onLanguageChange}
-          >
+          <select className="select select-sm" value={selectedLanguage} onChange={onLanguageChange}>
             {Object.entries(LANGUAGE_CONFIG).map(([key, lang]) => (
               <option key={key} value={key}>
                 {lang.name}
@@ -35,11 +28,7 @@ export default function CodeEditor({
           </select>
         </div>
 
-        <button
-          className="btn btn-primary btn-sm gap-2"
-          disabled={isRunning}
-          onClick={onRunCode}
-        >
+        <button className="btn btn-primary btn-sm gap-2" disabled={isRunning} onClick={onRunCode}>
           {isRunning ? (
             <>
               <Loader2Icon className="size-4 animate-spin" />
@@ -54,13 +43,12 @@ export default function CodeEditor({
         </button>
       </div>
 
-      {/* Editor */}
       <div className="flex-1">
         <Editor
-          height="100%"
+          height={"100%"}
           language={LANGUAGE_CONFIG[selectedLanguage].monacoLang}
-          value={code || ""}  // <-- Prevents Monaco crash
-          onChange={(value) => onCodeChange(value || "")}
+          value={code}
+          onChange={onCodeChange}
           theme="vs-dark"
           options={{
             fontSize: 16,
@@ -68,10 +56,10 @@ export default function CodeEditor({
             scrollBeyondLastLine: false,
             automaticLayout: true,
             minimap: { enabled: false },
-            smoothScrolling: true,
           }}
         />
       </div>
     </div>
   );
 }
+export default CodeEditorPanel;
