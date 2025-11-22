@@ -29,6 +29,10 @@
     "stream-chat-react": "^13.9.0",
     "talent-iq": "file:.."
   },
+   "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@tailwindcss/postcss": "^4.1.17",
