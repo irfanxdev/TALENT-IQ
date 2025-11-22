@@ -1,7 +1,5 @@
-import { useState } from 'react'
+
 // import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import {SignedIn, SignedOut, SignIn, SignInButton, SignOutButton, UserButton} from '@clerk/clerk-react';
 import { HomePage } from './pages/HomePage';
 import {Routes,Route, Navigate}  from "react-router-dom";
 import { useUser } from '@clerk/clerk-react';
@@ -11,7 +9,6 @@ import DashboardPage from "./pages/DashboardPage";
 import ProblemPage from './pages/ProblemPage.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
   
   //  this is used to check the user is login or not if not then navigate to the home page 
   const {isSignedIn,isLoaded}=useUser();
@@ -21,7 +18,7 @@ function App() {
   return (
    <>
     <Routes>
-      <Route path="/" element={!isSignedIn?<HomePage/>:<Navigate to={"/dashboard"}/>}/>
+      <Route path="/" element={!isSignedIn ? <HomePage /> : <Navigate to={"/dashboard"} />} />
       <Route path="/dashboard" element={isSignedIn?< DashboardPage/>:<Navigate to={"/"}/>}/>
 
       <Route path='/problems' element={isSignedIn?<ProblemsPage/>:<Navigate to={"/"}/>}/>
@@ -34,4 +31,4 @@ function App() {
 
 export default App
 
-//todo: react-query transtack query,axios
+//todo: react-query transtack query,axios 

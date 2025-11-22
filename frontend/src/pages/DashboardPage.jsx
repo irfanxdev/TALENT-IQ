@@ -18,8 +18,9 @@ const DashboardPage = () => {
 
   const createSessionMutation = useCreateSession();
 
-  const { data: activeSessionsData } = useActiveSessions();
-  const { data: recentSessionsData } = useMyRecentSessions();
+  const { data: activeSessionsData, isLoading: loadingActiveSessions } = useActiveSessions();
+  const { data: recentSessionsData, isLoading: loadingRecentSessions } = useMyRecentSessions();
+
 
   const handleCreateRoom = () => {
     if (!roomConfig.problem || !roomConfig.difficulty) return;
@@ -27,7 +28,7 @@ const DashboardPage = () => {
     createSessionMutation.mutate(
       {
         problem: roomConfig.problem,
-        difficulty: roomConfig.difficulty,
+        difficulty: roomConfig.difficulty.toLowerCase(),
       },
       {
         onSuccess: (data) => {
@@ -43,7 +44,11 @@ const DashboardPage = () => {
 
   console.log("API URL =", import.meta.env.VITE_API_URL);
 
+  const isUserInSession=(session)=>{
+    if(!user.id) return false;
 
+    return (session.host?.clerkId===user.id || session.participant?.some(p=>p.clerkId===user.id));; 
+   }
   return (
     <>
     <div className='min-h-screen bg-base-300'>
@@ -53,8 +58,15 @@ const DashboardPage = () => {
       {/* grid layout */}
       <div className='container mx-auto px-6 pb-16'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-          <StatsCards/>
-          <ActiveSessions/>
+          <StatsCards
+          activeSessionsCount={activeSessions.length}
+          recentSessionsCount={recentSessions.length}
+          />
+          <ActiveSessions
+          sessions={activeSessions}
+          isLoading={loadingActiveSessions}
+          isUserInSession={isUserInSession}
+          />
         </div>
         <RecentSessions/>
       </div>

@@ -2,61 +2,64 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { sessionApi } from "../api/sessions";
 
-// CREATE SESSION
 export const useCreateSession = () => {
-  return useMutation({
+  const result = useMutation({
     mutationKey: ["createSession"],
     mutationFn: sessionApi.createSession,
-    onSuccess: () => toast.success("Session created successfully"),
-    onError: (error) =>
-      toast.error(error.response?.data?.message || "Failed to create room"),
+    onSuccess: () => toast.success("Session created successfully!"),
+    onError: (error) => toast.error(error.response?.data?.message || "Failed to create room"),
   });
+
+  return result;
 };
 
-// ACTIVE SESSIONS (all open rooms)
 export const useActiveSessions = () => {
-  return useQuery({
+  const result = useQuery({
     queryKey: ["activeSessions"],
     queryFn: sessionApi.getActiveSessions,
   });
+
+  return result;
 };
 
-// MY RECENT SESSIONS (used on dashboard)
 export const useMyRecentSessions = () => {
-  return useQuery({
+  const result = useQuery({
     queryKey: ["myRecentSessions"],
     queryFn: sessionApi.getMyRecentSessions,
   });
+
+  return result;
 };
 
-// GET SESSION BY ID
 export const useSessionById = (id) => {
-  return useQuery({
+  const result = useQuery({
     queryKey: ["session", id],
     queryFn: () => sessionApi.getSessionById(id),
     enabled: !!id,
-    refetchInterval: 5000, // auto refresh every 5 seconds
+    refetchInterval: 5000, // refetch every 5 seconds to detect session status changes
   });
+
+  return result;
 };
 
-// JOIN SESSION
-export const useJoinSession = (id) => {
-  return useMutation({
+export const useJoinSession = () => {
+  const result = useMutation({
     mutationKey: ["joinSession"],
-    mutationFn: () => sessionApi.joinSession(id),
+    mutationFn: sessionApi.joinSession,
     onSuccess: () => toast.success("Joined session successfully!"),
-    onError: (error) =>
-      toast.error(error.response?.data?.message || "Failed to join session"),
+    onError: (error) => toast.error(error.response?.data?.message || "Failed to join session"),
   });
+
+  return result;
 };
 
-// END SESSION (fixed bug)
-export const useEndSession = (id) => {
-  return useMutation({
+export const useEndSession = () => {
+  const result = useMutation({
     mutationKey: ["endSession"],
-    mutationFn: () => sessionApi.endSession(id), // FIXED
+    mutationFn: sessionApi.endSession,
     onSuccess: () => toast.success("Session ended successfully!"),
-    onError: (error) =>
-      toast.error(error.response?.data?.message || "Failed to end session"),
+    onError: (error) => toast.error(error.response?.data?.message || "Failed to end session"),
   });
+
+  return result;
 };
