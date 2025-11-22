@@ -1,12 +1,13 @@
 
 // import reactLogo from './assets/react.svg'
-import { HomePage } from './pages/HomePage';
-import {Routes,Route, Navigate}  from "react-router-dom";
 import { useUser } from '@clerk/clerk-react';
-import { ProblemsPage } from './pages/ProblemsPage';
 import { Toaster } from 'react-hot-toast';
+import { Navigate, Route, Routes } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
+import { HomePage } from './pages/HomePage';
 import ProblemPage from './pages/ProblemPage.jsx';
+import { ProblemsPage } from './pages/ProblemsPage';
+import SessionPage from './pages/SessionPage.jsx';
 
 function App() {
   
@@ -23,6 +24,7 @@ function App() {
 
       <Route path='/problems' element={isSignedIn?<ProblemsPage/>:<Navigate to={"/"}/>}/>
        <Route path='/problem/:id' element={isSignedIn?<ProblemPage/>:<Navigate to={"/"}/>}/>
+       <Route path='/session/:id' element={isSignedIn?<SessionPage/> : <Navigate to={"/"}/>}/>
     </Routes>
     <Toaster position='top-center' toastOptions={{duration:3000}}/>
   </>

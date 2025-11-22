@@ -3,7 +3,7 @@ import mongoose  from 'mongoose';
 const sessionSchema= new mongoose.Schema({
     problem:{
         type:String,
-        reqired:true,
+        required:true,
     },
     difficulty:{
         type:String,
@@ -15,7 +15,7 @@ const sessionSchema= new mongoose.Schema({
         ref:'User',
         required:true,
     },
-    participants:{
+    participant:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
         default:null,
