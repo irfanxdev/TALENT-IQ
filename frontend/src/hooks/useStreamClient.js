@@ -11,7 +11,7 @@ function useStreamClient(session, loadingSession, isHost, isParticipant) {
   const [channel, setChannel] = useState(null);
   const [isInitializingCall, setIsInitializingCall] = useState(true);
 
-  // 🔥 FIX: store references in useRef so cleanup always sees the latest values
+  // FIX: store references in useRef so cleanup always sees the latest values
   const videoCallRef = useRef(null);
   const chatClientRef = useRef(null);
   const streamClientRef = useRef(null);

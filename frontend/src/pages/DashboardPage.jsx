@@ -45,7 +45,7 @@ const DashboardPage = () => {
   console.log("API URL =", import.meta.env.VITE_API_URL);
 
   const isUserInSession = (session) => {
-  if (!user.id) return false;
+  if (!user?.id) return false;
 
   return (
     session.host?.clerkId === user.id ||
