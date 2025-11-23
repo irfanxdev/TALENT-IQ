@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { PROBLEMS } from "../data/problems";
-import confetti from "canvas-confetti";
-import { useActiveSessions } from "../hooks/useSessions";
+import Navbar from "../components/Navbar";
 
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Navbar } from "../components/Navbar";
 import ProblemDescription from "../components/ProblemDescription";
+import OutputPanel from "../components/OutputPanel";
 import CodeEditorPanel from "../components/CodeEditorPanel";
-import { executeCode } from "../lib/piston";   // <-- Make sure name matches your file
+import { executeCode } from "../lib/piston";
+
 import toast from "react-hot-toast";
-import { OutputPanel } from "../components/OutputPanel";
-function ProblemPage(){
+import confetti from "canvas-confetti";
+
+function ProblemPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const {data:activeSessions,isLoading,error}=useActiveSessions();
-  console.log(activeSessions)
-
   const [currentProblemId, setCurrentProblemId] = useState("two-sum");
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
-  const [code, setCode] = useState(
-    PROBLEMS[currentProblemId].starterCode.javascript
-  );
+  const [code, setCode] = useState(PROBLEMS[currentProblemId].starterCode.javascript);
   const [output, setOutput] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
 
   const currentProblem = PROBLEMS[currentProblemId];
 
-  // Update problem when URL changes OR language changes
+  // update problem when URL param changes
   useEffect(() => {
     if (id && PROBLEMS[id]) {
       setCurrentProblemId(id);
@@ -37,10 +33,6 @@ function ProblemPage(){
     }
   }, [id, selectedLanguage]);
 
-
-  // ----------------------------
-  // Language dropdown change
-  // ----------------------------
   const handleLanguageChange = (e) => {
     const newLang = e.target.value;
     setSelectedLanguage(newLang);
@@ -48,83 +40,71 @@ function ProblemPage(){
     setOutput(null);
   };
 
+  const handleProblemChange = (newProblemId) => navigate(`/problem/${newProblemId}`);
 
-  // ----------------------------
-  // Problem change (from dropdown)
-  // ----------------------------
-  const handleProblemChange = (newProblemId) =>
-    navigate(`/problem/${newProblemId}`);
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 80,
+      spread: 250,
+      origin: { x: 0.2, y: 0.6 },
+    });
 
+    confetti({
+      particleCount: 80,
+      spread: 250,
+      origin: { x: 0.8, y: 0.6 },
+    });
+  };
 
-  // ----------------------------
-  // Normalize output for comparison
-  // ----------------------------
   const normalizeOutput = (output) => {
+    // normalize output for comparison (trim whitespace, handle different spacing)
     return output
       .trim()
       .split("\n")
       .map((line) =>
         line
           .trim()
+          // remove spaces after [ and before ]
           .replace(/\[\s+/g, "[")
           .replace(/\s+\]/g, "]")
+          // normalize spaces around commas to single space after comma
           .replace(/\s*,\s*/g, ",")
       )
       .filter((line) => line.length > 0)
       .join("\n");
   };
 
+  const checkIfTestsPassed = (actualOutput, expectedOutput) => {
+    const normalizedActual = normalizeOutput(actualOutput);
+    const normalizedExpected = normalizeOutput(expectedOutput);
 
-  // ----------------------------
-  // Test case checker
-  // ----------------------------
-  const checkIfTestPassed = (actual, expected) => {
-    const normActual = normalizeOutput(actual);
-    const normExpected = normalizeOutput(expected);
-    return normActual === normExpected;
+    return normalizedActual == normalizedExpected;
   };
 
-
-  const triggerConfetti=()=>{
-    confetti({
-      particleCount:80,
-      spread:250,
-      origin:{x:0.2,y:0.6},
-    });
-
-    confetti({
-      particleCount:80,
-      spread:250,
-      origin:{x:0.8,y:0.6},
-    });
-  };
-  // ----------------------------
-  // Run Code
-  // ----------------------------
   const handleRunCode = async () => {
-    
     setIsRunning(true);
-    setOutput(null); 
+    setOutput(null);
 
     const result = await executeCode(selectedLanguage, code);
-
-    setOutput(result);  
+    setOutput(result);
     setIsRunning(false);
 
-    if (result.success) {
-      const expected = currentProblem.expectedOutput[selectedLanguage];
-      const passed = checkIfTestPassed(result.output, expected);
+    // check if code executed successfully and matches expected output
 
-      if (passed){ 
-        toast.success("🎉 All test cases passed!");
+    if (result.success) {
+      const expectedOutput = currentProblem.expectedOutput[selectedLanguage];
+      const testsPassed = checkIfTestsPassed(result.output, expectedOutput);
+
+      if (testsPassed) {
         triggerConfetti();
+        toast.success("All tests passed! Great job!");
+      } else {
+        toast.error("Tests failed. Check your output!");
       }
-      else toast.error("❌ Test failed. Check your code!");
-    }else {
-      toast.error("Code execution failed");
+    } else {
+      toast.error("Code execution failed!");
     }
   };
-
 
   return (
     <div className="h-screen bg-base-100 flex flex-col">
@@ -132,8 +112,8 @@ function ProblemPage(){
 
       <div className="flex-1">
         <PanelGroup direction="horizontal">
+          {/* left panel- problem desc */}
           <Panel defaultSize={40} minSize={30}>
-            {/* Left Panel */}
             <ProblemDescription
               problem={currentProblem}
               currentProblemId={currentProblemId}
@@ -144,11 +124,11 @@ function ProblemPage(){
 
           <PanelResizeHandle className="w-2 bg-base-300 hover:bg-primary transition-colors cursor-col-resize" />
 
+          {/* right panel- code editor & output */}
           <Panel defaultSize={60} minSize={30}>
             <PanelGroup direction="vertical">
-
-              {/* Code Editor Panel */}
-              <Panel defaultSize={60} minSize={30}>
+              {/* Top panel - Code editor */}
+              <Panel defaultSize={70} minSize={30}>
                 <CodeEditorPanel
                   selectedLanguage={selectedLanguage}
                   code={code}
@@ -159,13 +139,13 @@ function ProblemPage(){
                 />
               </Panel>
 
-              <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-col-resize" />
+              <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
 
-              {/* Output Panel */}
-              <Panel defaultSize={20} minSize={30}>
+              {/* Bottom panel - Output Panel*/}
+
+              <Panel defaultSize={30} minSize={30}>
                 <OutputPanel output={output} />
               </Panel>
-
             </PanelGroup>
           </Panel>
         </PanelGroup>
