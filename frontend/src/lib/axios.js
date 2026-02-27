@@ -8,7 +8,7 @@ console.log(import.meta.env.VITE_API_URL)
 const axiosInstance=axios.create({
     // api url 
    
-    baseURL:import.meta.env.VITE_API_URL,
+    baseURL: `${import.meta.env.VITE_API_URL}/api`,
     withCredentials:true, // browser will sent the cookies to server automatically, on every single  req
 })
 export default axiosInstance;
