@@ -1,4 +1,5 @@
 import express from "express";
+import fs from "fs";
 import path from "path";
 import cors from "cors";
 import { serve } from "inngest/express";
@@ -29,10 +30,6 @@ app.use(
   })
 );
 
-// Handle all preflight requests
-app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
-
-
 // ------------------------------------------------------------
 // Middleware
 // ------------------------------------------------------------
@@ -56,11 +53,15 @@ app.get("/health", (req, res) => {
 // Use "*" instead
 // ------------------------------------------------------------
 if (ENV.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  const distPath = path.join(__dirname, "../frontend/dist");
+  const indexHtmlPath = path.join(distPath, "index.html");
 
-  app.get("/{*any}", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
-  });
+  if (fs.existsSync(indexHtmlPath)) {
+    app.use(express.static(distPath));
+    app.get("*", (req, res) => {
+      res.sendFile(indexHtmlPath);
+    });
+  }
 }
 
 // ------------------------------------------------------------
