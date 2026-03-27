@@ -19,7 +19,6 @@ export const initializeStreamClient = async (user, token) => {
     apiKey,
     user,
     token,
-    timeout: 10000 ,
   });
 
   return client;

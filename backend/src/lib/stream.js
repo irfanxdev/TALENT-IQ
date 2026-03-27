@@ -29,5 +29,3 @@ export const deleteStreamUser = async (userId) => {
     console.error("Error deleting the Stream user:", error);
   }
 };
-
-// todo:auto email send
