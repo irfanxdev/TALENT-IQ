@@ -1,5 +1,5 @@
+
 import express from "express";
-import fs from "fs";
 import path from "path";
 import cors from "cors";
 import { serve } from "inngest/express";
@@ -13,68 +13,38 @@ import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoute.js";
 
 const app = express();
+
 const __dirname = path.resolve();
 
-// ------------------------------------------------------------
-// ✅ CORS — MUST COME BEFORE ROUTES
-// ------------------------------------------------------------
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",   // frontend local
-      ENV.CLIENT_URL             // deployed frontend
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "Clerk-User-Id"],
-  })
-);
-
-// ------------------------------------------------------------
-// Middleware
-// ------------------------------------------------------------
+// middleware
 app.use(express.json());
-app.use(clerkMiddleware()); // adds req.auth()
+// credentials:true meaning?? => server allows a browser to include cookies on request
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
+app.use(clerkMiddleware()); // this adds auth field to request object: req.auth()
 
-// ------------------------------------------------------------
-// Routes
-// ------------------------------------------------------------
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
 
 app.get("/health", (req, res) => {
-  res.status(200).json({ msg: "API is up and running" });
+  res.status(200).json({ msg: "api is up and running" });
 });
 
-// ------------------------------------------------------------
-// Production Deployment Fix
-// Express v5 ❌ does NOT support "/{*any}"
-// Use "*" instead
-// ------------------------------------------------------------
+// make our app ready for deployment
 if (ENV.NODE_ENV === "production") {
-  const distPath = path.join(__dirname, "../frontend/dist");
-  const indexHtmlPath = path.join(distPath, "index.html");
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  if (fs.existsSync(indexHtmlPath)) {
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(indexHtmlPath);
-    });
-  }
+  app.get("/{*any}", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
 }
 
-// ------------------------------------------------------------
-// Start the Server
-// ------------------------------------------------------------
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(ENV.PORT, () =>
-      console.log(`🚀 Server running on port: ${ENV.PORT}`)
-    );
+    app.listen(ENV.PORT, () => console.log("Server is running on port:", ENV.PORT));
   } catch (error) {
-    console.error("💥 Error starting the server:", error);
+    console.error("💥 Error starting the server", error);
   }
 };
 
