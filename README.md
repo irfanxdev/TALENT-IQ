@@ -1,146 +1,83 @@
-<img width="1919" height="829" alt="Screenshot 2025-11-23 162024" src="https://github.com/user-attachments/assets/674cff80-242c-415c-a210-8d3c0b6bc4fd" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
 
-Talent-IQ – A Real-Time Coding Interview Platform (MERN Stack)
+  <h1>🚀 Talent-IQ – Real-Time Coding Interview Platform</h1>
 
-Talent-IQ is a real-time coding interview platform built using the MERN Stack.
-This project was created to solve a common problem faced during technical interview preparation:
-there is no smooth platform where learners can code, communicate, share screens, and collaborate in one place.
+  <p>
+    Talent-IQ is a real-time coding interview platform built using the MERN stack.
+    It provides an environment where users can practice technical interviews with
+    live coding, communication, and collaboration features.
+  </p>
 
-Talent-IQ provides a complete interview-like environment designed for seamless technical practice.
+  <hr>
 
-Why I Built This
+  <h2>💡 Problem Statement</h2>
+  <p>
+    Existing platforms do not provide a seamless combination of coding, video communication,
+    and collaboration in a single environment. Talent-IQ solves this by integrating all
+    essential interview features into one platform.
+  </p>
 
-During interview preparation, learners struggle with:
+  <hr>
 
-No platform that supports coding + video call + screen sharing together
+  <h2>✨ Key Features</h2>
+  <ul>
+    <li>Real-time collaborative code editor</li>
+    <li>Video calling with camera and microphone control</li>
+    <li>Screen sharing and recording</li>
+    <li>Real-time chat messaging</li>
+    <li>Integrated code execution using Piston API</li>
+    <li>Secure authentication and protected routes</li>
+  </ul>
 
-Difficulty collaborating with co-learners
+  <hr>
 
-Lack of smooth chat, camera/mic controls, and screen recording
+  <h2>🛠️ Tech Stack</h2>
+  <ul>
+    <li><strong>Frontend:</strong> React.js, Tailwind CSS</li>
+    <li><strong>Backend:</strong> Node.js, Express.js</li>
+    <li><strong>Database:</strong> MongoDB</li>
+    <li><strong>Tools:</strong> TanStack Query, Inngest</li>
+  </ul>
 
-Missing integrated compiler for running DSA problems
+  <hr>
 
-Talent-IQ solves all of these issues using modern web technologies.
+  <h2>⚙️ How It Works</h2>
+  <ul>
+    <li>User authentication and session handling</li>
+    <li>Real-time communication using WebSockets</li>
+    <li>Code execution via external API (Piston)</li>
+    <li>Efficient data fetching and background job handling</li>
+  </ul>
 
-Features
-Real-Time Collaboration
+  <hr>
 
-One-to-one coding interview room
-
-Video calling
-
-Camera and microphone toggle
-
-Screen sharing
-
-Screen recording
-
-Real-time chat messaging
-
-Coding Environment
-
-Integrated code compiler using Piston API
-
-Multiple programming language support
-
-Real-time collaborative code sharing
-
-Interview Experience
-
-Clean, interview-style UI
-
-Smooth DSA problem-solving flow
-
-Co-learner collaboration tools
-
-Authentication & Security
-
-Secure authentication using Clerk
-
-Protected routes and session handling
-
-Backend Workflow
-
-TanStack Query for efficient data fetching
-
-Inngest for backend background jobs
-
-Express.js APIs with structured architecture
-
-Tech Stack
-Frontend
-
-React.js
-
-Tailwind CSS
-
-TanStack Query
-
-Backend
-
-Node.js
-
-Express.js
-
-Inngest
-
-Database
-
-MongoDB
-
-APIs / External Services
-
-Piston API (code execution)
-
-Clerk Authentication
-
-Installation & Setup
-1. Clone the Repository
+  <h2>▶️ Run Locally</h2>
+  <pre>
 git clone https://irfan-ansari303/talent-iq.git
 cd talent-iq
 
-2. Install Dependencies
-Frontend
-cd frontend
-npm install
-
-Backend
+# Backend
 cd backend
 npm install
-
-Environment Variables
-
-Create the following .env files.
-
-Frontend (frontend/.env)
-VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-VITE_API_URL=http://localhost:3000/api
-VITE_STREAM_API_KEY=your_stream_api_key
-
-Backend (backend/.env)
-PORT=3000
-DB_URL=your_mongodb_url
-NODE_ENV=development
-
-INNGEST_EVENT_KEY=your_inngest_event_key
-INNGEST_SIGNING_KEY=your_inngest_signing_key
-
-STREAM_API_KEY=your_stream_api_key
-STREAM_API_SECRET=your_stream_api_secret
-
-CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_SECRET_KEY=your_clerk_secret_key
-
-CLIENT_URL=your_frontend_url
-
-Running the Project
-Start Backend
-cd backend
 npm run dev
 
-Start Frontend
+# Frontend
 cd frontend
+npm install
 npm run dev
+  </pre>
 
+  <hr>
 
-If you find this project helpful, consider giving the repository a star.
+  <h2>👨‍💻 Author</h2>
+  <p>
+    Irfan Ansari – Full Stack Developer
+  </p>
+
+</body>
+</html>
